@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="./assets/scripts/vue.js"></script>
+        <script src="./assets/scripts/script.js"></script>
+        <script src="./assets/scripts/vue-color.js"></script>
+        <link rel="stylesheet" href="./assets/style/vue-color.css"/>
+        <link rel="stylesheet" href="./assets/style/style.css"></style>
+    </head>
+    <body>
+        <div id="app">
+            <color-picker v-bind="color" @input="onInput"></color-picker>
+            <h1 v-text="msg"></h1>
+            <pre v-text="JSON.stringify(information, null, 4)"></pre>
+        </div>
+        <script>
+            var ColorPicker = VueColorPicker;
+
+            Vue.createApp({
+                components: {
+                    ColorPicker: ColorPicker,
+                },
+                setup() {
+                    const color = Vue.reactive({
+                        pin: "ffd500",
+                        hue: 50,
+                        saturation: 100,
+                        luminosity: 50,
+                        alpha: 1,
+                    });
+                    const information = Vue.reactive({
+                        username: "mier",
+                        pin: "ffd500",
+                        type: "admin",
+                    });
+
+                    return {
+                        msg: 'information:',
+                        information,
+                        onInput(hue) {
+                            color.hue = hue;
+                            color.pin = hslToHex(hue, color.saturation, color.luminosity);
+                            information.pin = hslToHex(hue, color.saturation, color.luminosity);
+                        },
+                    };
+                },
+            }).mount('#app');
+        </script>
+    </body>
+</html>
