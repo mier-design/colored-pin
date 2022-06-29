@@ -26,3 +26,49 @@ function hslToHex(h, s, l) {
     };
     return `${toHex(r)}${toHex(g)}${toHex(b)}`;
   }
+  var ColorPicker = VueColorPicker;
+  Vue.createApp({
+      components: {
+          ColorPicker: ColorPicker,
+      },
+      setup() {
+          const color = Vue.reactive({
+              pin: "ffd500",
+              hue: 50,
+              saturation: 100,
+              luminosity: 50,
+              alpha: 1,
+          });
+          const information = Vue.reactive({
+              username: "mier",
+              pin: "ffd500",
+              type: "admin",
+          });
+
+          return {
+              msg: 'information:',
+              information,
+              color,
+              onInput(hue) {
+                color.pin = hslToHex(hue, color.saturation, color.luminosity);
+                color.hue = hue;
+                information.pin = hslToHex(hue, color.saturation, color.luminosity);
+            },
+            saturationset(saturation) {
+              console.log(saturation, Number(saturation.target.value))
+              color.saturation = Number(saturation.target.value);
+            }
+          };
+      },
+  }).mount('#app');
+  let rangeInput = document.getElementById("range");
+  container = document.getElementsByClassName("container")[0];  
+  brightnessbox = document.getElementsByClassName("brightness-box")[0];  
+  rangeInput.addEventListener("input", function() {
+    colorget = document.getElementsByClassName("rcp__rotator")[0];
+    colorget = colorget.style.transform;
+    colorget = Number(colorget.match(/(\d+)/)[0]);
+    console.log(colorget, "lol");
+    rangeInput.style.filter = "brightness(" + rangeInput.value + "%)";
+    brightnessbox.style.background = "#"+hslToHex(colorget, 100, Number(rangeInput.value))+";";
+  });
